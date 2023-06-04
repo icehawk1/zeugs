@@ -16,12 +16,21 @@ def generate_usernames(person):
     ret = []
     ret += ["%s%s"%(person.vornamen[0], person.nachnamen[0])]
     ret += ["%s.%s"%(person.vornamen[0], person.nachnamen[0])]
-    return ret
+    ret += ["%s%s"%(person.vornamen[0][0], person.nachnamen[0])]
+    ret += ["%s.%s"%(person.vornamen[0][0], person.nachnamen[0])]
+    ret += ["%s"%(person.vornamen[0])]
+    ret += ["%s-%s"%(person.vornamen[0], person.nachnamen[0])]
+    return [username.lower().strip().replace("'", "") for username in ret]
     
 assert len(sys.argv)>=2, "Bitte CSV mit Leuten als ersten Parameter"
+usernames = []
 with open(sys.argv[1]) as inputfile:
     csvreader = csv.DictReader(inputfile,delimiter=',')
     for row in csvreader:
         person_details = process_row(row)
-        print("%s wird zu: %s"%(row,generate_usernames(person_details)))
+        #print("%s wird zu: %s"%(row,generate_usernames(person_details)))
+        usernames += generate_usernames(person_details)
+
+for user in usernames:
+    print(user)
 
